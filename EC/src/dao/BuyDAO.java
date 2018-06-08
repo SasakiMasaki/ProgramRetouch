@@ -100,4 +100,37 @@ public class BuyDAO {
 		}
 	}
 
+	@SuppressWarnings("null")
+	public static int[] getBuyIdsByUserId(int userId) throws SQLException {
+		Connection con = null;
+		PreparedStatement st = null;
+		try {
+			con = DBManager.getConnection();
+
+			st = con.prepareStatement(
+					"SELECT * FROM t_buy WEHER user_id = ?");
+			st.setInt(1, userId);
+
+			ResultSet rs = st.executeQuery();
+			int[] buyIdList = null;
+			int i = 0;
+
+			while (rs.next()) {
+				buyIdList[i] = rs.getInt("id");
+				i++;
+			}
+
+			System.out.println("searching BuyIdsList by userID has been completed");
+
+			return buyIdList;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			throw new SQLException(e);
+		} finally {
+			if (con != null) {
+				con.close();
+			}
+		}
+	}
+
 }
