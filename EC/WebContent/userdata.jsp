@@ -1,18 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="beans.BuyDataBeans"%>
-<%@ page import="beans.UserDataBeans"%>
-<%@ page import=" java.util.ArrayList"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>ユーザー情報</title>
 <jsp:include page="/baselayout/head.html" />
-<%
-	String validationMessage = (String) request.getAttribute("validationMessage");
-	UserDataBeans udb = (UserDataBeans)request.getAttribute("udb");
-	ArrayList<BuyDataBeans> BDBList = (BuyDataBeans).getAttribute("BDBList");
-%>
+
 </head>
 <body>
 	<jsp:include page="/baselayout/header.jsp" />
@@ -27,25 +22,21 @@
 				<div class="card grey lighten-5">
 					<div class="card-content">
 						<form action="UserDataUpdateConfirm" method="POST">
-							<%
-								if (validationMessage != null) {
-							%>
-							<p class="red-text center-align"><%=validationMessage%></p>
-							<%
-								}
-							%>
+							<c:if test="${validationMessage != null}" >
+							<p class="red-text center-align">${validationMessage}</p>
+							</c:if>
 							<br> <br>
 							<div class="row">
 								<div class="input-field col s6">
-									<input type="text" name="user_name" value="<%=udb.getName()%>"> <label>名前</label>
+									<input type="text" name="user_name" value="${udb.name}"> <label>名前</label>
 								</div>
 								<div class="input-field col s6">
-									<input type="text" name="login_id" value="<%=udb.getLoginId()%>"> <label>ログインID</label>
+									<input type="text" name="login_id" value="${udb.loginId}"> <label>ログインID</label>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s12">
-									<input type="text" name="user_address" value="<%=udb.getAddress()%>"> <label>住所</label>
+									<input type="text" name="user_address" value="${udb.address}"> <label>住所</label>
 								</div>
 							</div>
 							<div class="row">
@@ -74,15 +65,14 @@
 							</thead>
 							<tbody>
 
-								<%for(BuyDataBeans bdb : BDBList){%>
+								<c:forEach var="bdb" items="${BDBList}">
 									<tr>
 										<td class="center"><a href="UserBuyHistoryDetail?buy_id=${bdb.id}" class="btn-floating btn waves-effect waves-light "> <i class="material-icons">details</i></a></td>
-										<td class="center">${bdb.buyDate}</td>
+										<td class="center">${bdb.getFormatDate()}</td>
 										<td class="center">${bdb.deliveryMethodName}</td>
-										<td class="center">${bdb,totalPrice}円</td>
+										<td class="center">${bdb.totalPrice}円</td>
 									</tr>
-								<% }%>
-
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import base.DBManager;
 import beans.BuyDataBeans;
@@ -100,24 +102,22 @@ public class BuyDAO {
 		}
 	}
 
-	@SuppressWarnings("null")
-	public static int[] getBuyIdsByUserId(int userId) throws SQLException {
+	public static List<Integer> getBuyIdsByUserId(int userId) throws SQLException {
 		Connection con = null;
-		PreparedStatement st = null;
 		try {
 			con = DBManager.getConnection();
 
-			st = con.prepareStatement(
-					"SELECT * FROM t_buy WEHER user_id = ?");
+			String sql = "SELECT * FROM t_buy WHERE user_id = ?";
+
+			PreparedStatement st = con.prepareStatement(sql);
 			st.setInt(1, userId);
 
 			ResultSet rs = st.executeQuery();
-			int[] buyIdList = null;
-			int i = 0;
+			List<Integer> buyIdList = new ArrayList<Integer>();
 
 			while (rs.next()) {
-				buyIdList[i] = rs.getInt("id");
-				i++;
+				int id = rs.getInt("id");
+				buyIdList.add(id);
 			}
 
 			System.out.println("searching BuyIdsList by userID has been completed");

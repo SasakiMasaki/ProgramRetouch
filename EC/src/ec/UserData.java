@@ -2,6 +2,7 @@ package ec;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +36,7 @@ public class UserData extends HttpServlet {
 			// 更新確認画面から戻ってきた場合Sessionから取得。それ以外はuserIdでユーザーを取得
 			UserDataBeans udb = session.getAttribute("returnUDB") == null ? UserDAO.getUserDataBeansByUserId(userId) : (UserDataBeans) EcHelper.cutSessionAttribute(session, "returnUDB");
 
-			int[] buyIdsList = BuyDAO.getBuyIdsByUserId(userId);
+			List<Integer> buyIdsList = BuyDAO.getBuyIdsByUserId(userId);
 			ArrayList<BuyDataBeans> BDBList = new ArrayList<BuyDataBeans>();
 
 			for(int buyId : buyIdsList) {
